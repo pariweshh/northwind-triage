@@ -71,7 +71,7 @@ northwind-triage/
 ├── app/
 │   ├── api/
 │   │   ├── triage/route.ts        (POST /api/triage — Zod-validated, 10k char cap)
-│   │   └── batch/route.ts         (POST /api/batch — maxDuration 90s, 15s per-message timeout)
+│   │   └── batch/route.ts         (POST /api/batch — maxDuration 90s, 30s per-message timeout)
 │   ├── page.tsx                   (header, tab nav, mounts both views)
 │   ├── layout.tsx                 (Syne + JetBrains Mono fonts)
 │   └── globals.css                (dark design system, Tailwind theme tokens)
@@ -82,7 +82,7 @@ northwind-triage/
 │   └── ScoreBar.tsx               (accuracy figure + progress line used in batch summary)
 ├── constants/
 │   └── index.ts                   (CATEGORY_STYLES, PRIORITY_STYLES badge classes)
-├── middleware.ts                   (CORS — open in dev, locked to NEXT_PUBLIC_APP_URL in prod)
+├── proxy.ts                   (CORS — open in dev, locked to NEXT_PUBLIC_APP_URL in prod)
 ├── lib/
 │   ├── agent.ts                   (system prompt + Anthropic API call)
 │   └── score.ts                   (shared scoring logic for batch route + CLI)
@@ -108,11 +108,11 @@ northwind-triage/
 
 **Batch timeout handling.** The batch route sets `maxDuration = 90` so the deployment runtime won't cut it off at the default 30-second limit. Each individual message is wrapped in a `Promise.race` with a 15-second timeout, so one slow API call can't block the rest — it records an error for that message and moves on.
 
-**CORS.** `middleware.ts` matches all `/api/*` routes. In development (no `NEXT_PUBLIC_APP_URL` set) all origins are allowed. In production the route is locked to the configured app URL; preflight requests from other origins get a 403.
+**CORS.** `proxy.ts` matches all `/api/*` routes. In development (no `NEXT_PUBLIC_APP_URL` set) all origins are allowed. In production the route is locked to the configured app URL; preflight requests from other origins get a 403.
 
 **UI.** The interface uses a dark dispatch-console aesthetic: near-black background, amber accents for actions and active states, JetBrains Mono for labels and IDs, Syne for body text. Priority badges (red, amber, green) are high-contrast against the dark surface. Results animate in on arrival; the online indicator pulses in CSS with no JS.
 
-**Model:** `claude-sonnet-4-5`. Good instruction following, reliable JSON output, fast enough for this.
+**Model:** `claude-sonnet-4-6`. Good instruction following, reliable JSON output, fast enough for this.
 
 ---
 
@@ -120,13 +120,13 @@ northwind-triage/
 
 Ran against all 20 messages in `benchmark.json`.
 
-|                                |             |
+| Metric                         | Score       |
 | ------------------------------ | ----------- |
 | Strict accuracy (all 4 fields) | 80% (16/20) |
 | Category                       | 100%        |
-| Priority                       | 85%         |
+| Priority                       | 90%         |
 | Route to                       | 100%        |
-| Needs human review             | 95%         |
+| Needs human review             | 90%         |
 
 Category and routing were clean across the board. The four misses were all on priority or the human review flag and they follow the same pattern. The agent over-escalated things that the benchmark kept at P3.
 

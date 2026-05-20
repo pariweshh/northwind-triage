@@ -265,7 +265,7 @@ export async function runTriage(req: TriageRequest): Promise<TriageResult> {
   const userContent = lines.join("\n");
 
   const response = await getClient().messages.create({
-    model: "claude-sonnet-4-5",
+    model: "claude-sonnet-4-6",
     max_tokens: 1024,
     system: SYSTEM_PROMPT,
     messages: [{ role: "user", content: userContent }],
