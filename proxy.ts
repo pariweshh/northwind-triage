@@ -7,7 +7,7 @@ const CORS_HEADERS = {
   "Access-Control-Allow-Headers": "Content-Type",
 };
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const origin = req.headers.get("origin");
   const isPreflight = req.method === "OPTIONS";
 
