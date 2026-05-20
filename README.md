@@ -42,7 +42,7 @@ You can also run the batch evaluation from the command line:
 npm run batch
 ```
 
-This prints a score summary to stdout and writes the full results to `data/batch_results.json`.
+This prints a score summary to the terminal and writes the full results to `data/batch_results.json`.
 
 ---
 
