@@ -1,7 +1,6 @@
 import type { BenchmarkDecision, FieldScores, TriageResult } from "@/types";
 
 // Shared interface for inbound messages from the dataset.
-// The batch API route has access to all fields; the CLI script uses a subset.
 export interface InboundMessage {
   id: string;
   channel: string;
@@ -13,7 +12,6 @@ export interface InboundMessage {
 }
 
 // Scores a single triage result against its benchmark entry.
-// route_to: 1 = exact match, 0.5 = primary team correct but cc missed, 0 = wrong.
 export function scoreFields(
   result: TriageResult,
   bench: BenchmarkDecision,

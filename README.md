@@ -9,7 +9,7 @@ Takes a raw customer message, figures out what it is, who should handle it, how 
 You'll need Node 18+ and an Anthropic API key.
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/pariweshh/northwind-triage.git
 cd northwind-triage
 npm install
 ```
@@ -131,6 +131,12 @@ Ran against all 20 messages in `benchmark.json`.
 Category and routing were clean across the board. The four misses were all on priority or the human review flag and they follow the same pattern. The agent over-escalated things that the benchmark kept at P3.
 
 ---
+
+## Approach
+
+Before writing any code I read all the documents cover to cover. The SOP, service catalogue, and tone guide each have rules that interact with each other in non-obvious ways. Get the HVAC carve-out wrong and an after-hours heating call becomes a false emergency. Miss the appliance repair exclusion and a dishwasher job gets dispatched. Misread the $500 and $5,000 thresholds and your priority and routing logic falls apart. So the documents came first.
+
+The agent is a single prompt that encodes all of those rules explicitly. No orchestration, no multi-agent setup. One prompt, one API call, structured JSON back. The full stack wraps it: a Next.js API route on the backend, a two-tab UI for live triage and batch evaluation, and a CLI runner for scoring the full dataset.
 
 ## Where I disagree with the benchmark (and where I don't)
 

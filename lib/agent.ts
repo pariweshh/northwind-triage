@@ -58,12 +58,11 @@ function validateTriageResult(raw: unknown): TriageResult {
   return r as unknown as TriageResult;
 }
 
-// ─── System prompt ────────────────────────────────────────────────────────────
-// Encoding all SOP rules, routing logic, tone constraints, and edge cases.
-// Single-agent design: one prompt handles classification, priority, routing,
-// draft reply, human-review flag, and reasoning. No multi-agent overhead needed
-// for a task this bounded.
-
+/* ─── System prompt ────────────────────────────────────────────────────────────
+Encoding all SOP rules, routing logic, tone constraints, and edge cases.
+Single-agent design: one prompt handles classification, priority, routing,
+draft reply, human-review flag, and reasoning. No multi-agent overhead needed for a task this bounded.
+*/
 const SYSTEM_PROMPT = `<identity>
 You are the inbound triage agent for Northwind Home Services, a Sydney-based residential trades business (plumbing, electrical, HVAC). You process raw customer messages and return a structured triage decision used by internal staff.
 
@@ -278,12 +277,15 @@ export async function runTriage(req: TriageRequest): Promise<TriageResult> {
     throw new Error("No text content in model response");
   }
 
-  // Strip any accidental markdown fences before parsing
+  // Strip any accidental markdown fences and trailing commas before parsing.
+  // The model occasionally emits a trailing comma after the last JSON field,
+  // which is invalid JSON.
   const raw = textBlock.text
     .replace(/^```json\s*/i, "")
     .replace(/^```\s*/i, "")
     .replace(/```\s*$/i, "")
-    .trim();
+    .trim()
+    .replace(/,(\s*[}\]])/g, "$1");
 
   let parsed: unknown;
   try {

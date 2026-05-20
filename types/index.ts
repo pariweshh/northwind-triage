@@ -72,9 +72,7 @@ export interface BenchmarkDecision {
 export interface FieldScores {
   category: 0 | 1;
   priority: 0 | 1;
-  /** 1 = exact, 0.5 = primary team correct but cc missed, 0 = wrong */
   route_to: 0 | 0.5 | 1;
   needs_human_review: 0 | 1;
-  /** All four hard fields matched */
   strict: boolean;
 }

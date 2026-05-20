@@ -190,7 +190,10 @@ export function TriageView() {
               </span>
               <span
                 className="badge text-text-muted"
-                style={{ borderColor: "var(--border-dark)", background: "var(--surface-raised)" }}
+                style={{
+                  borderColor: "var(--border-dark)",
+                  background: "var(--surface-raised)",
+                }}
               >
                 {result.route_to}
               </span>
