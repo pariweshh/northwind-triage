@@ -21,7 +21,7 @@ ANTHROPIC_API_KEY=sk-ant-...
 
 # Optional — restricts the /api/* routes to this origin in production.
 # Leave unset in development to allow all origins.
-NEXT_PUBLIC_APP_URL=https://your-deployed-app.vercel.app
+NEXT_PUBLIC_APP_URL=<deployed_url>
 ```
 
 Start the app:
@@ -122,11 +122,11 @@ Ran against all 20 messages in `benchmark.json`.
 
 | Metric                         | Score       |
 | ------------------------------ | ----------- |
-| Strict accuracy (all 4 fields) | 80% (16/20) |
+| Strict accuracy (all 4 fields) | 90% (18/20) |
 | Category                       | 100%        |
-| Priority                       | 90%         |
+| Priority                       | 95%         |
 | Route to                       | 100%        |
-| Needs human review             | 90%         |
+| Needs human review             | 95%         |
 
 Category and routing were clean across the board. The four misses were all on priority or the human review flag and they follow the same pattern. The agent over-escalated things that the benchmark kept at P3.
 
