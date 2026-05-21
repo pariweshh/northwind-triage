@@ -140,11 +140,13 @@ The agent is a single prompt that encodes all of those rules explicitly. No orch
 
 ## Where I disagree with the benchmark (and where I don't)
 
-**MSG-008, MSG-010, MSG-016 (priority)**
+**MSG-010, MSG-016 (priority)**
 
-These all got bumped to P2 by the agent. Benchmark says P3. The agent's reasoning was that high-value quotes (bathroom reno, strata HVAC, dual switchboard and ducted install) warrant a faster response. The benchmark disagrees. QUOTE is P3 unless the customer signals urgency, and potential job value doesn't change that.
+MSG-016 got bumped to P2 by the agent. Benchmark says P3. The agent's reasoning was that a high-value quote (dual switchboard and ducted install) warrants a faster response. The benchmark disagrees. QUOTE is P3 unless the customer signals urgency, and potential job value doesn't change that.
 
 The benchmark is right here. I conflated two separate rules in the system prompt: high value triggers `needs_human_review`, not a priority bump. They should stay P3. Easy fix in the prompt but I'm not going to quietly correct it and note it instead.
+
+MSG-010 shows the same pattern occasionally. The CLI batch run classifies it correctly at P3 but the UI run sometimes bumps it to P2. That's the non-determinism at work on a genuinely borderline message: a strata multi-unit job that sits close to the high-value threshold. When it flips it's for the same reason as MSG-016, not a separate failure.
 
 **MSG-007 (needs_human_review)**
 
